@@ -1,0 +1,15 @@
+<div class="list-group">
+  <a class="list-group-item list-group-item-action flex-column align-items-start">
+    <div class="d-flex w-100 justify-content-between">
+      <h5 class="mb-1">{{selectedItem.bill.billName}}</h5>
+      <small class="text-muted">{{(selectedItem.stillDue).length}} payments left</small>
+    </div>
+    <small class="text-muted"> <b>Total Cost</b>: £{{selectedItem.bill.cost}} | <b>Split Cost</b> : ${{selectedItem.bill.cost/selectedItem.bill.numOfPayers  | number: '1.2-2'}} | <b>Bill created</b>:  {{selectedItem.bill.dateCreated | date:"MM/dd/yy"}}
+      | <b>Bill Due</b>:  {{selectedItem.bill.dateDue | date:"MM/dd/yy"}} </small>
+
+    <p class="mb-1"> <b>Description</b> : {{ selectedItem.bill.description != 'null' ?  selectedItem.bill.description : 'No additional information'}}</p>
+    <small class="text-muted" *ngIf="(selectedItem.stillDue).length > 0">Users who still owe money:
+      <p *ngFor="let item of selectedItem.stillDue" style="color: #EE3B3B;">{{item}}</p>
+    </small>
+  </a>
+</div>

@@ -1,0 +1,28 @@
+.scrollmenu{
+  background-color: #2e9cca;
+  overflow: auto;  /* Scroll bar  set automatically*/
+  white-space: nowrap;   /* All elements are next to one another */
+  border: 0.1px grey solid;
+  border-radius: 3px;
+
+}
+a {
+  display: inline-block; /* attempts to place all items inline  */
+  color: white;
+  text-align: center;
+  padding: 4px;
+  text-decoration: none;
+  border-right: 0.1px white solid;
+}
+#innerbox
+{
+  width:40px; /* or whatever width you want. */
+  height:50px; /* or whatever width you want. */
+  max-width:150px; /* or whatever width you want. */
+  /*max-height: 100px;*/
+}
+.noNotifications{
+
+  color: white;
+  font-family: "Trebuchet MS";
+}

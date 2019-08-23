@@ -1,0 +1,5 @@
+
+<a id="innerbox" style="cursor: pointer" style="background-color:#F76C6C; cursor: pointer" *ngIf="BillNotification.BillId && show; else other " hoverItem (click)="onClick()"> <b>New Bill</b> <br>{{BillNotification.BillId.billName}} | (${{BillNotification.BillId.cost/BillNotification.BillId.numOfPayers | number: '1.2-2'  }}) </a>
+<ng-template #other>
+  <a id="innerbox" style="cursor: pointer" style="background-color:#A8D0E6; cursor: pointer" hoverItem *ngIf="show"  (click)="onClick()"> <b>Party request</b> <br> Party: {{BillNotification.PartyId.groupName}} </a>
+</ng-template>

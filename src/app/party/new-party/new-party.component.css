@@ -1,0 +1,18 @@
+.new{
+  margin-bottom: 10px;
+}
+input.ng-invalid.ng-touched{
+  border: 1px red solid;
+}
+.r{
+  border-right: 1px lightgray dashed;
+  height: 30px;
+}
+span{
+  color: red;
+}
+
+h4{
+  font-size: 15pt;
+  font-family: "Trebuchet MS";
+}

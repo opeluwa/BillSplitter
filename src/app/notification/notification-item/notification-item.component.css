@@ -1,0 +1,20 @@
+a {
+  display: inline-block; /* attempts to place all items inline  */
+  color: white;
+  text-align: center;
+  padding: 4px;
+  text-decoration: none;
+  border-right: 0.1px white solid;
+}
+
+a:hover {
+  background-color: royalblue;
+}
+
+#innerbox
+{
+  width:4000px; /* or whatever width you want. */
+  height:50px; /* or whatever width you want. */
+  max-width:150px; /* or whatever width you want. */
+  /*max-height: 100px;*/
+}

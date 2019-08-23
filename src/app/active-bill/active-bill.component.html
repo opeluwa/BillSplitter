@@ -1,0 +1,54 @@
+<div class="container">
+  <div class="col-sm-12">
+  <div class="row">
+      <div class="col-12 col-md-6">
+        <div class="row">
+          <div class="mx-auto">
+            <h4>My Active Bills</h4>
+          </div>
+        </div>
+
+        <div class="row">
+            <div class="mx-auto">
+            <ng-container *ngIf="myActiveBills">
+              <ul class="list-group">
+                <app-my-active-bill-item *ngFor="let item of myActiveBills" [selectedItem]="item">item</app-my-active-bill-item>
+              </ul>
+
+            </ng-container>
+              <div *ngIf="myActiveBills && myActiveBills.length === 0">
+              <div class="t">
+                <h4 style="color: dimgrey" > No Bills Available</h4>
+              </div>
+              </div>
+            </div>
+        </div>
+
+      </div>
+
+    <div class="col-12 col-md-6">
+      <div class="row">
+        <div class="mx-auto">
+          <h4>Bills that are due</h4>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="mx-auto">
+          <ng-container *ngIf="bills && (bills| filterPay: false)">
+            <ul class="list-group">
+              <app-active-bill-item *ngFor="let item of bills | filterPay: false ; let i = index"  [Item] = bills.indexOf(item)>item</app-active-bill-item>
+            </ul>
+          </ng-container>
+          <div *ngIf="bills && (bills| filterPay: false).length ===  0">
+          <div class="t" >
+            <h4 style="color: dimgrey" > No Bills Available</h4>
+          </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+</div>

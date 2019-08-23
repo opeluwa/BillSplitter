@@ -1,0 +1,16 @@
+.l{
+  margin-top: 20px;
+  border-right: 6px solid green;
+  height: 75vh;
+  font-family: "Trebuchet MS";
+}
+
+.r{
+  margin-top: 20px;
+  height: 75vh;
+  font-family: "Trebuchet MS";
+}
+
+.top{
+  margin-top: 20px;
+}

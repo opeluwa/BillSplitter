@@ -1,0 +1,47 @@
+<div class="row">
+  <div class="mx-auto">
+  <h4>Create a new party</h4>
+  </div>
+</div>
+
+<div *ngIf="!isLoading2">
+    <form [formGroup] ="form" (ngSubmit)="Onclick()">
+      <div class="mx-auto">
+      <div class="row">
+        <div class="col-sm-12">
+          <div class="form-group">
+            <label for="name">Party name</label>
+            <input type="text" id="name" class="form-control" formControlName="name">
+          </div>
+        </div>
+       </div>
+
+      <div class="row">
+        <div class="col-sm-12">
+          <label for="email">Member emails</label>
+        </div>
+      </div>
+      <div formArrayName="email">
+            <div class="row new" *ngFor="let userEmasail of returnControls(); let i = index" [formGroupName]="i">
+              <div class="col-7 col-md-7">
+                <input type="text" id="email"  name="email" class="form-control" formControlName="email">
+                <span class="help-block" *ngIf="!form.get('email.'+i).valid && form.get('email.'+i).touched" >An email is required</span>
+              </div>
+              <div class="col-1 float-right">
+                <button type="button" class="btn btn-danger" (click)="onDelete(i)">X</button>
+              </div>
+            </div>
+      </div>
+      <br>
+      <button type="button" (click)="newUser()"  class="btn btn-success">{{ (form.get('email')['controls']).length === 0 ?'Add a member' : 'Add another member' }}</button> &#160;
+        <button type="submit" class="btn btn-success " [disabled]="!form.valid || !(form.get('email')['controls']).length" >Create Party</button> <br>
+        <span class="help-block" *ngIf="form.get('email')['controls']==0 && form.touched">At least one member must be added to the party</span>
+        <span class="help-block" *ngIf="error">{{errorMessage}}</span>
+      <hr>
+      </div>
+  </form>
+</div>
+<div *ngIf="isLoading2" align="center" style="margin-top: 40vh">
+  <app-loading-spinner></app-loading-spinner>
+</div>
+

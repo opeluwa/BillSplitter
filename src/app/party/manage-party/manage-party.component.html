@@ -1,0 +1,49 @@
+<div class="row">
+  <div class="mx-auto">
+    <h4>Manage parties</h4>
+  </div>
+</div>
+
+<div *ngIf="!isLoading2">
+  <form (ngSubmit)="OnSubmit()" #f="ngForm">
+    <div class="form-group">
+      <label for="groups">Party</label>
+      <select name="party" id="" class="form-control" ngModel [(ngModel)]="partySelected" required [disabled]="usersParties === null" >
+        <option value="null" disabled selected hidden>select a party to manage</option>
+        <option *ngFor="let item of usersParties" [ngValue]="item">{{item.groupName}}</option>
+      </select>
+    </div>
+    <button class="btn btn-danger" type="submit"  [disabled]="!f.valid " >Leave group</button>
+<!--    <button class="btn btn-success pull-right" type="button" (click)="acceptRequest()" [disabled]="!f.valid ||(!!partySelected && !!partySelected.accepted)" >Accept request</button>-->
+    <div class="form-group">
+      <div class="row">
+      <div class="mx-auto">
+      <h4>Members</h4>
+      </div>
+      </div>
+    </div>
+    <hr>
+
+    <div class="row" *ngIf="!partySelected">
+      <div class="mx-auto">
+        <p style="color: grey;">Party members will appear here when selected</p>
+      </div>
+    </div>
+
+    <div class="row" *ngIf="partySelected">
+      <div class="mx-auto">
+      <ul class="list-group">
+        <li class="list-group-item" *ngFor="let item of partySelected.userEmail">{{item}}</li>
+      </ul>
+      </div>
+    </div>
+
+  </form>
+</div>
+<div *ngIf="isLoading2" align="center" style="margin-top: 40vh">
+  <app-loading-spinner></app-loading-spinner>
+</div>
+
+
+
+

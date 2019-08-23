@@ -1,0 +1,29 @@
+<div class="row top">
+    <div class="col-12 col-md-6">
+    <h4 align="center">My Paid Bills</h4>
+    <ul class="list-group">
+      <ng-container *ngIf="myBills">
+        <app-my-bill-paid *ngFor="let item of myBills" [selectedItem]="item">item</app-my-bill-paid>
+      </ng-container>
+      <div *ngIf="myBills && myBills.length ===0">
+      <div style="margin-top: 30vh;">
+        <h4 style="color: dimgrey" align="center" > No Bills Available</h4>
+      </div>
+      </div>
+    </ul>
+  </div>
+
+  <div class="col-12 col-md-6">
+    <h4 align="center">Paid Bills</h4>
+    <ul class="list-group">
+      <ng-container *ngIf="bills">
+        <app-bill-history-item *ngFor="let item of bills; let i = index" [Item] = bills.indexOf(item) >item</app-bill-history-item>
+      </ng-container>
+      <div *ngIf="bills && (bills |  filterPay: true).length === 0">
+      <div style="margin-top: 30vh;">
+        <h4 style="color: dimgrey" align="center" > No Bills Available</h4>
+      </div>
+      </div>
+    </ul>
+  </div>
+</div>

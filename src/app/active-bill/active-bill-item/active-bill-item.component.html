@@ -1,0 +1,26 @@
+<div class="list-group" *ngIf="popup && selectedItem && !selectedItem.paid" (click)="Onclick()" style="cursor: pointer">
+  <a class="list-group-item list-group-item-action flex-column align-items-start">
+    <div class="d-flex w-100 justify-content-between">
+      <h5 class="mb-1">{{selectedItem.mainBill.billName}}</h5>
+      <small class="text-muted">{{selectedItem.mainBill.dateDue | date:'fullDate' }}</small>
+    </div>
+    <small class="text-muted">
+      <b>Total Cost</b>: ${{selectedItem.mainBill.cost}} | <b>You owe</b> : £{{selectedItem.mainBill.cost/selectedItem.mainBill.numOfPayers  | number: '1.2-2'}} | <b>Bill created</b>:  {{selectedItem.mainBill.dateCreated | date:"MM/dd/yy"}}
+      | <b>Bill Due</b>:  {{selectedItem.mainBill.dateDue | date:"MM/dd/yy"}} </small>
+
+    <p class="mb-1"> <b>Description</b> : <label [ngStyle]="{'color': selectedItem.mainBill.description === 'null' ? 'grey' : 'black'}">{{ selectedItem.mainBill.description != 'null' ? selectedItem.mainBill.description : 'No additional information'}} </label> </p>
+    <small class="text-muted">(Click in order to pay)</small>
+  </a>
+</div>
+
+
+
+
+<div class="row" >
+  <ng-template appPlaceholder>
+<!--this is where component bill pops up-->
+  </ng-template>
+</div>
+
+
+

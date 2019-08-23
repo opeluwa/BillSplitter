@@ -1,0 +1,25 @@
+<div class="list-group" style="cursor: pointer" *ngIf="!isLoading" (click)="onClick()">
+  <a class="list-group-item list-group-item-action flex-column align-items-start">
+    <div class="d-flex w-100 justify-content-between">
+      <h5 class="mb-1">{{selectedItem.mainBill.billName}}</h5>
+      <small class="text-muted">{{  selectedItem.mainBill.dateDue > date ? 'Due' : 'Late'}}</small>
+    </div>
+    <small class="text-muted">Total Cost: ${{selectedItem.mainBill.cost}} | <b>You owe</b> : ${{selectedItem.mainBill.cost/selectedItem.mainBill.numOfPayers }} |
+      Bill created:  {{selectedItem.mainBill.dateCreated | date:"MM/dd/yy"}} | Bill Due:  {{selectedItem.mainBill.dateDue | date:"MM/dd/yy"}} </small>
+    <div class="image" *ngIf="selectedItem.mainBill.imagePath">
+      <img [src]=selectedItem.mainBill.imagePath [alt]="selectedItem.mainBill.billName">
+    </div>
+    <p class="mb-1">Click pay bellow to confirm payment of bill </p>
+    <button class="btn btn-success" type="button" (click)="pay()">Pay</button>
+    <br>
+    <small class="text-muted">(Click in order to pay)</small>
+
+
+    <p class="mb-1"> <b>Description</b> :  {{ selectedItem.mainBill.description != 'null' ? selectedItem.mainBill.description : 'No additional information'}}</p>
+    <small class="text-muted">(click anywhere on the blank spaces to close)</small>
+  </a>
+</div>
+
+<div *ngIf="isLoading" align="center" style="margin-top: 40vh">
+  <app-loading-spinner></app-loading-spinner>
+</div>

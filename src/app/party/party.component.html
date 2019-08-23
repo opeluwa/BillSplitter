@@ -1,0 +1,10 @@
+<div class="top">
+  <div class="row" *ngIf="!isLoadings">
+    <div class="col-xs-12 col-md-6">
+      <app-new-party (isLoading)="isLoadings"></app-new-party>
+    </div>
+    <div class="col-xs-12 col-md-6">
+      <app-manage-party (isLoading)="isLoadings"></app-manage-party>
+    </div>
+</div>
+</div>
