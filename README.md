@@ -1,27 +1,15 @@
-# BillSplitter
+# Bill-splitter
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 8.1.2.
+Application focuses around a party based system, where users can choose to create and leave groups. Bills can then be applied to all members in the group. Each bill contains basic information, including a photo of proof.
 
-## Development server
+Bill splitter application, created with an Angular front end and a NodeJs back end.
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
+The application can be used here : http://bills-splitter.s3-website.us-east-2.amazonaws.com
 
-## Code scaffolding
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+# Future work
 
-## Build
-
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory. Use the `--prod` flag for a production build.
-
-## Running unit tests
-
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
-
-## Running end-to-end tests
-
-Run `ng e2e` to execute the end-to-end tests via [Protractor](http://www.protractortest.org/).
-
-## Further help
-
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI README](https://github.com/angular/angular-cli/blob/master/README.md).
+- Notification system in the nav bar, allowing for users to see changes that apply to them.
+- Method to assign bills to subsections of a party
+- Ability to add more than one picture.
+- More efficient backend to process data in MongoDB
