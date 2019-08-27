@@ -24,7 +24,7 @@ getBills() {
     this.billSubject.next(data);
   });
 
-  this.httpServ.getMyActiveBills().subscribe(data =>{
+  return this.httpServ.getMyActiveBills().pipe(tap(data => {
     this.myActiveBills = [];
     this.paidBills = [];
     data.map(arrays => {
@@ -43,7 +43,7 @@ getBills() {
     });
     this.activeBillSubject.next(this.myActiveBills); // push new active bills
     this.paidBillSubject.next(this.paidBills); // push paid bills subject
-  });
+  }));
 }
 
   public getIndexBill(index: number): UserBillModel {

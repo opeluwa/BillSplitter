@@ -20,10 +20,10 @@ constructor(private authServ: AuthService, private http: HttpService) {}
   }
 
   public getParties() {  // parties getter
-   this.http.getParties().subscribe(data => {
+    return this.http.getParties().pipe(take(1), tap(data => {
      this.allUserParties = data;
      this.userParties.next(this.allUserParties);
-   });
+   }));
   }
 
   leaveParty(id: string, partyId: string) { // leave party request
