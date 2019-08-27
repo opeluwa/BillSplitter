@@ -33,7 +33,6 @@ export class LoginComponent implements OnInit {
         this.isLoading = false;
         this.router.navigate(['/ActiveBills']);  // navigate to active bills
       }, errorData => { // errors
-        console.log(errorData);
         this.isLoading = false;
         this.errorMessage = errorData;
         this.isError = true;
@@ -45,7 +44,6 @@ export class LoginComponent implements OnInit {
         this.islogin = true;
         this.router.navigate(['/ActiveBills']);
       }, errorData => { // errors
-        console.log(errorData);
         this.isLoading = false;
         this.errorMessage = errorData.error.message;
         this.isError = true;

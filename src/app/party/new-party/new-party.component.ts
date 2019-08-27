@@ -43,7 +43,11 @@ export class NewPartyComponent implements OnInit {
     });
   }
 
-
+  newUser() {
+    ( <FormArray> this.form.get('email')).push(new FormGroup({
+      'email': new FormControl(null, [Validators.required, Validators.email])
+    }));
+  }
 
   returnControls() {
     return (this.form.get('email') as FormArray).controls;
