@@ -2,13 +2,13 @@ const bcrypt = require("bcryptjs");
 const user = require('../models/user');
 const jwt = require('jsonwebtoken');
 
-exports.loginUser = (req, res, next) => { // log a user into the system
+exports.loginUser = (req, res, next) => { // log a user into the systemStore
   let fetchedUser;
   user.findOne({email: req.body.email}).then(user => {
     fetchedUser = user;
     if (!user) {
       return res.status(401).json({
-        message: 'EMAIL_NOT_FOUND'
+        message: 'Password or email address is wrong'
       });
     }
 
@@ -18,7 +18,7 @@ exports.loginUser = (req, res, next) => { // log a user into the system
 
     if (!result) {
       return res.status(401).json({
-        message: 'INVALID_PASSWORD'
+        message: 'Password or email address is wrong'
       });
     }
     const token = jwt.sign({email: fetchedUser.email, userId: fetchedUser._id}, process.env.JWT_KEY, {expiresIn: '1h'});  // create a token with 1 hour to expire
@@ -29,14 +29,13 @@ exports.loginUser = (req, res, next) => { // log a user into the system
       token
     })
   }).catch(err => {
-
     return res.status(401).json({
       message: 'Auth failed'
     });
   })
 };
 
-function findUserId(email, callback) {  // check if user exists in the system
+function findUserId(email, callback) {  // check if user exists in the systemStore
   user.findOne({email: email}).then(result => {
 
     if (!result) {

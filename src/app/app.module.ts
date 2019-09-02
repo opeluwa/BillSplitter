@@ -6,7 +6,7 @@ import { HeaderComponent } from './header/header.component';
 import { HoverDirective } from './notification/notification-item/hover.directive';
 import { AppRouter } from './app-router';
 import {TimeAgoPipe} from 'time-ago-pipe';
-import { NewBillComponent } from './new-bill/new-bill.component';
+import { NewBillComponent } from './notification/notification-item/new-bill/new-bill.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpService } from './Shared/http.service';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
@@ -22,6 +22,13 @@ import { HistoryModule } from './bill-history/history.module';
 import { ActiveBillModule} from './active-bill/activeBill.module';
 import { ErrorPageComponent } from './error-page/error-page.component';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
+import {StoreModule} from '@ngrx/store';
+import * as fromApp from './AppStore/app.reducer';
+import {EffectsModule} from '@ngrx/effects';
+import {PartyEffect} from './party/store/party.effects';
+import {AuthEffects} from './login/store/login.effect';
+import {ErrorInterceptor} from './error.interceptor';
+import {BillEffect} from './bill/store/bill.effect';
 
 @NgModule({
   declarations: [
@@ -45,9 +52,12 @@ import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
     NotificationModule,
     HistoryModule,
     ActiveBillModule,
-    BrowserAnimationsModule
+    BrowserAnimationsModule,
+    StoreModule.forRoot(fromApp.appReducer),
+    EffectsModule.forRoot([PartyEffect, AuthEffects, BillEffect]),
   ],
-  providers: [HttpService, AuthService, {provide: HTTP_INTERCEPTORS, useClass: Http_InterceptorInterceptor, multi: true }],
+  providers: [HttpService, AuthService, {provide: HTTP_INTERCEPTORS, useClass: Http_InterceptorInterceptor, multi: true },
+                                        {provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true }],
   bootstrap: [AppComponent],
   entryComponents: [BillComponent]
 })

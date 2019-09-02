@@ -23,6 +23,7 @@ function setPartUser(id, user, value, name) { // add a party to user collection 
 }
 
 exports.newParty = (req, res, next) => {  // new party creation
+  console.log(req.body);
   user.find({email: req.body.userEmail}).then(foundUsers =>{
     if (foundUsers.length !== req.body.userEmail.length){ // dont add a notification for the user who created the party
       return res.status(404).json({
@@ -38,18 +39,33 @@ exports.newParty = (req, res, next) => {  // new party creation
 
     req.body.userEmail.push(req.userData.email);
 
-    const Party = new Parties({
+    const Party1 = new Parties({
       groupName: req.body.groupName,
       user: req.userData.userId,
       userEmail: req.body.userEmail,
     });
-    Party.save().then(result => {  // pushed the data to the collection party based upon the model aka  mongoose.model('Party', partySchema)
+    Party1.save().then(result => {  // pushed the data to the collection party based upon the model aka  mongoose.model('Party', partySchema)
       req.body.userEmail.forEach(function(value) {
         findUserId(value, function (err,result) {
 
-          setPartUser(Party._id, result, false, req.body.groupName).save().then(result2 => {
+          setPartUser(Party1._id, result, false, req.body.groupName).save().then(result2 => {
             if( value !== req.userData.email) {
-              newPartyNotification(Party._id, result).save().then(data => {
+              newPartyNotification(Party1._id, result).save().then(data => {
+              });
+            }
+
+            if (value === req.userData.email) {
+              console.log('----=---' + Party1);
+              res.status(201).json({   // response is data unique to that user
+                message: 'success',
+                content : {
+                  groupName: req.body.groupName,
+                  user: req.userData.userId,
+                  userEmail: req.body.userEmail,
+                  id: result2._id,
+                  Party: Party1,
+                  accepted: result2.accepted
+                }
               });
             }
             if (!result){
@@ -60,13 +76,7 @@ exports.newParty = (req, res, next) => {  // new party creation
           });
         });
       });
-      CreatorPartyId = result._id;
-      res.status(201).json({
-        message: 'Success',
-        id: CreatorPartyId,
-        partyId: Party,
-        userId: req.userData.userId
-      });
+
     });
   });
 };
@@ -82,16 +92,22 @@ exports.getParties = (req, res, next) => { // get all parties that a user is wit
 };
 
 exports.leaveParty = (req, res, next) =>{  // leave a party
+  console.log(req.body);
   PartiesUser.deleteOne({_id: req.params.id, user: req.userData.userId}).then(result=>{
     if (result.n > 0){ // n is bigger than 0 if successful
-      Parties.findOneAndUpdate({_id: req.body.partyId}, { "$pull": {"userEmail": req.userData.email } },{ safe: true, multi:true, useFindAndModify: false }, function (err, obj) { // remove use email from members
-      });
+      console.log('-----' + req.body.partyId);
+      console.log('-----' + req.userData.email);
+      Parties.updateOne(
+        {"_id": req.body.partyId},
+        { "$pull": {"userEmail": req.userData.email}},
+        function(err,status) {
+        }
+      );
       res.status(200).json({ message: "Post deleted!"});
     } else {
       res.status(401).json({ message: "Post not deleted!"});
     }
-
-  })
+  });
   // res.status(200).json({ message: "Post deleted!"});
 };
 

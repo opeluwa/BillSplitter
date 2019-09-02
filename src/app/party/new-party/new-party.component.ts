@@ -1,27 +1,38 @@
-import {Component, EventEmitter, OnInit, Output} from '@angular/core';
+import {Component, EventEmitter, OnDestroy, OnInit, Output} from '@angular/core';
 import { FormArray, FormControl, FormGroup, Validators} from '@angular/forms';
-import {PartyService} from '../party.service';
-import {take} from 'rxjs/operators';
 
+import {take} from 'rxjs/operators';
+import * as fromApp from '../../AppStore/app.reducer';
+import {Store} from '@ngrx/store';
+import * as partyAction from '../store/party.action';
+import {Subscription} from 'rxjs';
 @Component({
   selector: 'app-new-party',
   templateUrl: './new-party.component.html',
   styleUrls: ['./new-party.component.css']
 })
-export class NewPartyComponent implements OnInit {
+export class NewPartyComponent implements OnInit, OnDestroy {
   form: FormGroup;
   email = new FormArray([]);
   error = false;
-  errorMessage = '';
+  errorMessage: string = null;
   @Output() isLoading = new EventEmitter<boolean>();
   isLoading2 = false;
+  partySub: Subscription;
 
-  constructor(private partyServ: PartyService) {}
+  constructor(private store: Store<fromApp.AppState>) {}
 
   ngOnInit() {
     this.form = new FormGroup({  // reactive form set up.
       'name': new FormControl(null,Validators.required),
       'email' : this.email
+    });
+
+    this.partySub = this.store.select('parties').subscribe(partiesData => {
+      if (partiesData.AddErrorMessage) {
+        this.errorMessage = partiesData.AddErrorMessage;
+      }
+      this.isLoading2 = partiesData.isLoadingNew;
     });
   }
 
@@ -29,18 +40,7 @@ export class NewPartyComponent implements OnInit {
     this.error = false; // remove error message
     this.errorMessage = '';
     const usersEmails = (this.form.get('email').value).map(({email}) => email); // get all emails
-    this.isLoading.emit(true);
-    this.isLoading2 = true;
-    this.partyServ.addNewParties(this.form.get('name').value, usersEmails).pipe(take(1)).subscribe(data => {  // attempt to add user in server
-      this.isLoading.emit(false);
-      this.partyServ.getParties();
-      this.isLoading2 = false;
-    }, data => {
-      this.isLoading2 = false;
-      this.errorMessage = data.error.message;
-      this.errorMessage = !data.error.message ?  'Error connecting to server please try again later' : this.errorMessage ;
-      this.error = true;
-    });
+    this.store.dispatch(new partyAction.addPartiesStart({groupName: this.form.get('name').value, usersEmails}));
   }
 
   newUser() {
@@ -54,7 +54,12 @@ export class NewPartyComponent implements OnInit {
   }
 
   onDelete(index) {   // deleted database
-    ( <FormArray> this.form.get('email')).removeAt(index);
+    this.errorMessage = null;
+    (<FormArray> this.form.get('email')).removeAt(index);
+  }
+
+  ngOnDestroy(): void {
+    this.partySub.unsubscribe();
   }
 
 }

@@ -1,10 +1,14 @@
-import { Component, OnInit } from '@angular/core';
-import {BillsService} from '../Shared/bills.service';
+import {Component, OnDestroy, OnInit} from '@angular/core';
 import {AuthService} from '../Shared/auth.service';
 import {UserBillModel} from '../Shared/userBill.model';
 import {NotificationService} from '../notification/notification.service';
 // import {animate, state, style, transition, trigger} from '@angular/animations';
-
+import * as fromApp from '../AppStore/app.reducer';
+import * as billAction from '../bill/store/bill.action';
+import * as fromBill from '../bill/store/bill.reducer';
+import {Store} from '@ngrx/store';
+import {map} from 'rxjs/operators';
+import {Subscription} from 'rxjs';
 @Component({
   selector: 'app-active-bill',
   templateUrl: './active-bill.component.html',
@@ -12,21 +16,23 @@ import {NotificationService} from '../notification/notification.service';
   // animations: [trigger('list', [state('in', style({opacity: 1, transform: 'translateX(0)'})),
   //   transition('void => *', [style({opacity: 0, transform: 'translateX(-100px)'}), animate(1000)])])]
 })
-export class ActiveBillComponent implements OnInit {
+export class ActiveBillComponent implements OnInit, OnDestroy {
   bills: UserBillModel[] = [];
   myActiveBills = [];
   state = 'normal';
-  constructor(private billServ: BillsService, private authServ: AuthService, private notificationServ: NotificationService) { }
+  sub: Subscription;
+  constructor(private authServ: AuthService,
+              private notificationServ: NotificationService, private store: Store<fromApp.AppState>) { }
 
   ngOnInit() {
-    this.notificationServ.wipeBills(); // wipe bill notifications as page has been visted.
-    this.billServ.billSubject.subscribe(data => {  // get emited bills. no need to destroy
-      this.bills = data;   // store the bills recieved
+    this.sub = this.store.select('bill').subscribe((bills: fromBill.State) => {
+      this.myActiveBills = bills.myActiveBills;
+      this.bills = bills.bills;
     });
+  }
 
-    this.billServ.activeBillSubject.subscribe(data => {    // get users active bills
-      this.myActiveBills = data;
-    });
+  ngOnDestroy(): void {
+    this.sub.unsubscribe();
   }
 
 }

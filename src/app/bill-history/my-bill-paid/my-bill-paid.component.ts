@@ -1,5 +1,4 @@
 import {Component, Input, OnInit} from '@angular/core';
-import {BillsService} from '../../Shared/bills.service';
 
 @Component({
   selector: 'app-my-bill-paid',
@@ -8,7 +7,7 @@ import {BillsService} from '../../Shared/bills.service';
 })
 export class MyBillPaidComponent implements OnInit {
   @Input() selectedItem;
-  constructor(private BillServ: BillsService) { }
+  constructor() { }
 
   ngOnInit() {
   }

@@ -16,7 +16,7 @@ mongoose.connect("mongodb+srv://Opeoluwa:" + process.env.MONOGO_ATLAS_PW + "@clu
 });
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: false}));  // body parser can parse different types of bodies.
-app.use("/images", express.static(path.join("backend/images")));  // any requests targetting /image.   path relates it to the system directory
+app.use("/images", express.static(path.join("backend/images")));  // any requests targetting /image.   path relates it to the systemStore directory
 
 app.use((req, res, next) => {
   res.setHeader('Access-Control-Allow-Origin',"*");

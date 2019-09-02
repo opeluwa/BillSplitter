@@ -1,54 +1,47 @@
-import {Component, OnInit, ViewChild} from '@angular/core';
+import {Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {NgForm} from '@angular/forms';
-import {HttpService} from '../Shared/http.service';
-import {take} from 'rxjs/operators';
+import {map, take, tap} from 'rxjs/operators';
 import {Router} from '@angular/router';
 import {AuthService} from '../Shared/auth.service';
 import {LoadingSpinner} from '../Shared/spinner/loading-spinner';
-
+import * as fromApp from '../AppStore/app.reducer';
+import * as authActions from './store/login.actions';
+import {Store} from '@ngrx/store';
+import {Subscription} from 'rxjs';
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.css']
 })
-export class LoginComponent implements OnInit {
+export class LoginComponent implements OnInit, OnDestroy {
   islogin: boolean = true;  // decides whether to show login view or sign up view
   @ViewChild('f', {static: false}) f: NgForm;
-  isError = false; // show error or not
-  errorMessage: string = '';  // error message variable
+  errorMessage: string = null;  // error message variable
   isLoading = false;  // decides whether to show loading menu
-
-  constructor(private httpServ: HttpService, private router: Router, private authServ: AuthService) {
+  sub: Subscription;
+  constructor(private router: Router,
+              private authServ: AuthService, private store: Store<fromApp.AppState>) {
   }
 
   ngOnInit() {
-    this.httpServ.logout();
+    this.sub = this.store.select('auth').pipe(map(data => { return data; })).subscribe(data => {
+      this.errorMessage = data.authError;
+      this.isLoading = data.isLoading;
+    });
+
   }
 
   onSubmit() {
-    this.isLoading = true;
     if (this.islogin) {
-      this.httpServ.login(this.f.value.email, this.f.value.password).pipe(take(1)).subscribe(data => {  // try to login only take 1
-        this.isError = false;
-        this.isLoading = false;
-        this.router.navigate(['/ActiveBills']);  // navigate to active bills
-      }, errorData => { // errors
-        this.isLoading = false;
-        this.errorMessage = errorData;
-        this.isError = true;
-      });
+      this.store.dispatch(new authActions.loginStart(
+        {email: this.f.value.email, password: this.f.value.password}));
     } else {
-      this.httpServ.SignUp(this.f.value.email, this.f.value.password).pipe(take(1)).subscribe(data => { // sign up and move to active bills page
-        this.isError = false;
-        this.isLoading = false;
-        this.islogin = true;
-        this.router.navigate(['/ActiveBills']);
-      }, errorData => { // errors
-        this.isLoading = false;
-        this.errorMessage = errorData.error.message;
-        this.isError = true;
-
-      });
+      this.store.dispatch(new authActions.signUp(
+        {email: this.f.value.email, password: this.f.value.password}));
     }
+  }
+
+  ngOnDestroy(): void {
+    this.sub.unsubscribe();
   }
 }

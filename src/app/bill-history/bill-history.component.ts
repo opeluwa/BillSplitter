@@ -1,27 +1,31 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnDestroy, OnInit} from '@angular/core';
 import {UserBillModel} from '../Shared/userBill.model';
-import {BillsService} from '../Shared/bills.service';
-
+import * as fromApp from '../AppStore/app.reducer';
+import {Store} from '@ngrx/store';
+import * as fromBill from '../bill/store/bill.reducer';
+import {Subscription} from 'rxjs';
 @Component({
   selector: 'app-bill-history',
   templateUrl: './bill-history.component.html',
   styleUrls: ['./bill-history.component.css']
 })
-export class BillHistoryComponent implements OnInit {
+export class BillHistoryComponent implements OnInit, OnDestroy {
   bills: UserBillModel[] = [];
   myBills = [];
+  sub: Subscription;
 
-  constructor(private billServ: BillsService) { }
+  constructor(private store: Store<fromApp.AppState>) { }
 
   ngOnInit() {
-    this.billServ.billSubject.subscribe(data => { // sets the bills assaigned by other users.
-      this.bills = data;
+    this.sub = this.store.select('bill').subscribe((bills: fromBill.State) => {
+      console.log(bills.bills);
+      this.bills = bills.bills;
+      this.myBills = bills.paidBills;
     });
+  }
 
-    this.billServ.paidBillSubject.subscribe(data => {  // sets bills asaigned by the current user.
-      this.myBills = data;
-    });
-
+  ngOnDestroy(): void {
+    this.sub.unsubscribe();
   }
 
 }

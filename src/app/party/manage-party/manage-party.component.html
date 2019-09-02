@@ -13,7 +13,14 @@
         <option *ngFor="let item of usersParties" [ngValue]="item">{{item.groupName}}</option>
       </select>
     </div>
+
+    <div class="row mx-auto">
     <button class="btn btn-danger" type="submit"  [disabled]="!f.valid " >Leave group</button>
+    </div>
+    <div class="row mx-auto">
+    <span class="help-block help" *ngIf="error">{{error}}</span>
+    </div>
+
 <!--    <button class="btn btn-success pull-right" type="button" (click)="acceptRequest()" [disabled]="!f.valid ||(!!partySelected && !!partySelected.accepted)" >Accept request</button>-->
     <div class="form-group">
       <div class="row">

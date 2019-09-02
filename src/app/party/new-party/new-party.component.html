@@ -36,7 +36,7 @@
       <button type="button" (click)="newUser()"  class="btn btn-success">{{ (form.get('email')['controls']).length === 0 ?'Add a member' : 'Add another member' }}</button> &#160;
         <button type="submit" class="btn btn-success " [disabled]="!form.valid || !(form.get('email')['controls']).length" >Create Party</button> <br>
         <span class="help-block" *ngIf="form.get('email')['controls']==0 && form.touched">At least one member must be added to the party</span>
-        <span class="help-block" *ngIf="error">{{errorMessage}}</span>
+        <span class="help-block" *ngIf="errorMessage">{{errorMessage}}</span>
       <hr>
       </div>
   </form>

@@ -45,7 +45,7 @@
             <div class="form-group">
               <label for="group">Party Group</label>
               <select id="group" formControlName="party" name="group"  class="form-control">
-                <option value="null" disabled selected hidden>Select a party</option>
+                <option value="null" disabled selected hidden>{{ userParties.length === 0 ? 'You must be in a party first' : 'Select a party' }}</option>
                 <option *ngFor="let item of userParties" [ngValue]="item">{{item.groupName}}</option>
               </select>
             </div>

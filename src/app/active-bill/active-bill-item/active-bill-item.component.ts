@@ -1,30 +1,38 @@
-import {Component, ComponentFactoryResolver, Input, OnInit, ViewChild} from '@angular/core';
-import {BillModel} from '../../Shared/bill.model';
+import {Component, ComponentFactoryResolver, Input, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
-import {BillsService} from '../../Shared/bills.service';
 import {BillComponent} from '../../bill/bill.component';
 import {PlaceholderDirective} from '../../Shared/placeholder.directive';
-import {map, take, tap} from 'rxjs/operators';
+import {take} from 'rxjs/operators';
 import {UserBillModel} from '../../Shared/userBill.model';
-import {Moment} from 'moment';
+import * as fromApp from '../../AppStore/app.reducer';
+import * as fromBill from '../../bill/store/bill.reducer';
+import {Store} from '@ngrx/store';
+import {Subscription} from 'rxjs';
 @Component({
   selector: 'app-active-bill-item',
   templateUrl: './active-bill-item.component.html',
   styleUrls: ['./active-bill-item.component.css']
 })
-export class ActiveBillItemComponent implements OnInit {
+export class ActiveBillItemComponent implements OnInit, OnDestroy {
   @Input() Item: number;
   selectedItem: UserBillModel;
   popup = true;
   isLoading = false;
 
   @ViewChild(PlaceholderDirective, {static: false}) BillHost: PlaceholderDirective;    // gives access to a pointer to where this directive is used
-  constructor(private router: Router, private route: ActivatedRoute, private billServ: BillsService,
-              private ComponentFactory: ComponentFactoryResolver) { }
+  constructor(private router: Router, private route: ActivatedRoute,
+              private ComponentFactory: ComponentFactoryResolver, private store: Store<fromApp.AppState>) { }
+
+              sub: Subscription;
+              paidSub: Subscription;
+              closeSub: Subscription;
+
 
   ngOnInit() {
-    this.selectedItem = this.billServ.getIndexBill(this.Item); // set the bill item from the index given
-
+    this.sub = this.store.select('bill').pipe(take(1)).subscribe((billState: fromBill.State) => {
+      this.selectedItem = billState.bills[this.Item];
+      this.isLoading = billState.isLoading;
+    });
   }
 
   Onclick() {  // when a bill is clicked, a component is made.
@@ -36,15 +44,28 @@ export class ActiveBillItemComponent implements OnInit {
     const compRef =  hostViewContainer.createComponent(cmpFactory);
     compRef.instance.selectedItem = this.selectedItem;
     compRef.instance.Index = this.Item;
-    compRef.instance.closeDiv.subscribe(() => {
+
+    this.closeSub =  compRef.instance.closeDiv.subscribe(() => {
       compRef.destroy();
       this.popup = !this.popup;
     });
 
-    compRef.instance.payBill.subscribe(() => {  // listen to whether a pay request has been emitted.
+    this.paidSub = compRef.instance.payBill.subscribe(() => {  // listen to whether a pay request has been emitted.
       compRef.destroy();
       this.popup = !this.popup;
     });
+  }
+
+  ngOnDestroy(): void {
+    this.sub.unsubscribe();
+
+    if (this.paidSub) {
+      this.paidSub.unsubscribe();
+    }
+
+    if (this.closeSub) {
+      this.closeSub.unsubscribe();
+    }
   }
 
 }
