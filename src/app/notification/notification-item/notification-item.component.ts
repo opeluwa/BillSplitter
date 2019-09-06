@@ -14,7 +14,6 @@ export class NotificationItemComponent implements OnInit {
   constructor(private notificationServ: NotificationService, private router: Router) { }
   show = true;
   ngOnInit() {
-    console.log(this.BillNotification);
     this.notificationServ.wipeAllVar.pipe(take(1)).subscribe(() => {  // if all is wipe hide the notification
       this.show = false;
     });

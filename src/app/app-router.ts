@@ -1,6 +1,6 @@
 import {NgModule} from '@angular/core';
 import {PreloadAllModules, RouterModule, Routes} from '@angular/router';
-import {NewBillComponent} from './notification/notification-item/new-bill/new-bill.component';
+import {NewBillComponent} from './new-bill/new-bill.component';
 import {LoginComponent} from './login/login.component';
 import {AuthGuard} from './authentication/auth.guard';
 import {PartyResolver} from './party/party.resolver';

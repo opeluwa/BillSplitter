@@ -1,9 +1,36 @@
+<div class="row" style="margin-top: 2vh; margin-right: 1vw">
+  <div class="ml-auto">
+  <div class="dropdown show" style="cursor: pointer" (click)="onDropdown()" >
+    <a class="dropdown-toggle"  role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+      Sort By
+    </a>
+
+    <div class="dropdown-menu dropdown-menu-right" appButtonDropDown #dropdown aria-labelledby="dropdownMenuLink">
+      <a class="dropdown-item" (click)="selected=1" [ngStyle]="{'color': selected == 1 ? 'blue' : 'black'}" style="cursor: pointer">
+        Closest date
+      </a>
+      <a class="dropdown-item" (click)="selected=2" [ngStyle]="{'color': selected == 2 ? 'blue' : 'black'}" style="cursor: pointer">
+        Oldest date
+      </a>
+      <a class="dropdown-item" (click)="selected=3" [ngStyle]="{'color': selected == 3 ? 'blue' : 'black'}" style="cursor: pointer">
+        A-z
+      </a>
+      <a class="dropdown-item" (click)="selected=4" [ngStyle]="{'color': selected == 4 ? 'blue' : 'black'}" style="cursor: pointer">
+        Cost Asc
+      </a>
+      <a class="dropdown-item" (click)="selected=5" [ngStyle]="{'color': selected == 5 ? 'blue' : 'black'}" style="cursor: pointer">
+        Cost Desc
+      </a>
+    </div>
+  </div>
+  </div>
+</div>
 <div class="row top">
     <div class="col-12 col-md-6">
     <h4 align="center">My Paid Bills</h4>
     <ul class="list-group">
       <ng-container *ngIf="myBills">
-        <app-my-bill-paid *ngFor="let item of myBills" [selectedItem]="item">item</app-my-bill-paid>
+        <app-my-bill-paid *ngFor="let item of myBills | billSorter: selected" [selectedItem]="item">item</app-my-bill-paid>
       </ng-container>
       <div *ngIf="myBills && myBills.length ===0">
       <div style="margin-top: 30vh;">
@@ -17,7 +44,7 @@
     <h4 align="center">Paid Bills</h4>
     <ul class="list-group">
       <ng-container *ngIf="bills">
-        <app-bill-history-item *ngFor="let item of bills; let i = index" [Item] = bills.indexOf(item) >item</app-bill-history-item>
+        <app-bill-history-item *ngFor="let item of (bills | billSorter: selected); let i = index" [Item] = bills.indexOf(item) >item</app-bill-history-item>
       </ng-container>
       <div *ngIf="bills && (bills |  filterPay: true).length === 0">
       <div style="margin-top: 30vh;">

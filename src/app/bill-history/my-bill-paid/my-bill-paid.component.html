@@ -2,12 +2,12 @@
   <a class="list-group-item list-group-item-action flex-column align-items-start">
     <span class="badge badge-primary badge-pill" style="background-color: green">Completely Paid</span>
     <div class="d-flex w-100 justify-content-between">
-      <h5 class="mb-1">{{selectedItem.bill.billName}}</h5>
-      <small class="text-muted">{{selectedItem.bill.dateDue | date:'fullDate' }}</small>
+      <h5 class="mb-1">{{selectedItem.billName}}</h5>
+      <small class="text-muted">{{selectedItem.dateDue | date:'fullDate' }}</small>
     </div>
-    <small class="text-muted"> <b>Total Cost</b>: £{{selectedItem.bill.cost}} | <b>You owed</b> : ${{selectedItem.bill.cost/selectedItem.bill.numOfPayers  | number: '1.2-2'}} | <b>Bill created</b>:  {{selectedItem.bill.dateCreated | date:"MM/dd/yy"}}
-      | <b>Bill Due date</b>:  {{selectedItem.bill.dateDue | date:"MM/dd/yy"}} </small>
-    <p class="mb-1"> <b>Description</b> : {{ selectedItem.bill.description}}</p>
+    <small class="text-muted"> <b>Total Cost</b>: £{{selectedItem.cost}} | <b>You owed</b> : £{{selectedItem.cost/selectedItem.numOfPayers  | number: '1.2-2'}} | <b>Bill created</b>:  {{selectedItem.dateCreated | date:"MM/dd/yy"}}
+      | <b>Bill Due date</b>:  {{selectedItem.dateDue | date:"MM/dd/yy"}} </small>
+    <p class="mb-1"> <b>Description</b> : {{ selectedItem.description}}</p>
     <small class="text-muted"  style="color: green;">This bill has been paid by all members :)</small>
   </a>
 </div>

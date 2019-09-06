@@ -8,7 +8,7 @@ exports.loginUser = (req, res, next) => { // log a user into the systemStore
     fetchedUser = user;
     if (!user) {
       return res.status(401).json({
-        message: 'Password or email address is wrong'
+        message: 'Email is not registered'
       });
     }
 

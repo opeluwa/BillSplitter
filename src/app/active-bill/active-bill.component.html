@@ -1,3 +1,31 @@
+<div class="row" style="margin-top: 2vh; margin-right: 1vw">
+  <div class="ml-auto">
+    <div class="dropdown show" style="cursor: pointer" (click)="onDropdown()" >
+      <a class="dropdown-toggle"  role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+        Sort By
+      </a>
+
+      <div class="dropdown-menu dropdown-menu-right" appButtonDropDown #dropdown aria-labelledby="dropdownMenuLink">
+        <a class="dropdown-item" (click)="selected=1" [ngStyle]="{'color': selected == 1 ? 'blue' : 'black'}" style="cursor: pointer">
+          Closest date
+        </a>
+        <a class="dropdown-item" (click)="selected=2" [ngStyle]="{'color': selected == 2 ? 'blue' : 'black'}" style="cursor: pointer">
+          Oldest date
+        </a>
+        <a class="dropdown-item" (click)="selected=3" [ngStyle]="{'color': selected == 3 ? 'blue' : 'black'}" style="cursor: pointer">
+          A-z
+        </a>
+        <a class="dropdown-item" (click)="selected=4" [ngStyle]="{'color': selected == 4 ? 'blue' : 'black'}" style="cursor: pointer">
+          Cost Asc
+        </a>
+        <a class="dropdown-item" (click)="selected=5" [ngStyle]="{'color': selected == 5 ? 'blue' : 'black'}" style="cursor: pointer">
+          Cost Desc
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+
 <div class="container">
   <div class="col-sm-12">
   <div class="row">
@@ -12,7 +40,7 @@
             <div class="mx-auto">
             <ng-container *ngIf="myActiveBills">
               <ul class="list-group">
-                <app-my-active-bill-item *ngFor="let item of myActiveBills" [selectedItem]="item">item</app-my-active-bill-item>
+                <app-my-active-bill-item *ngFor="let item of myActiveBills | billSorter:selected " [selectedItem]="item">item</app-my-active-bill-item>
               </ul>
 
             </ng-container>
@@ -37,7 +65,7 @@
         <div class="mx-auto">
           <ng-container *ngIf="bills && (bills| filterPay: false)">
             <ul class="list-group">
-              <app-active-bill-item *ngFor="let item of bills | filterPay: false ; let i = index"  [Item] = bills.indexOf(item)>item</app-active-bill-item>
+              <app-active-bill-item *ngFor="let item of bills  |filterPay: false | billSorter:selected  ; let i = index"  [Item] = bills.indexOf(item)>item</app-active-bill-item>
             </ul>
           </ng-container>
           <div *ngIf="bills && (bills| filterPay: false).length ===  0">

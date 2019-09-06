@@ -39,7 +39,6 @@ export class AuthService {
   }
 
   removeLogoutTimer() {
-    console.log('logout');
     clearInterval(this.tokenTimer);
   }
 

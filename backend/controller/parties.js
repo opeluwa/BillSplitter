@@ -55,7 +55,6 @@ exports.newParty = (req, res, next) => {  // new party creation
             }
 
             if (value === req.userData.email) {
-              console.log('----=---' + Party1);
               res.status(201).json({   // response is data unique to that user
                 message: 'success',
                 content : {

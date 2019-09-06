@@ -1,4 +1,4 @@
-import {Component, OnDestroy, OnInit} from '@angular/core';
+import {Component, ElementRef, OnDestroy, OnInit, Renderer2, ViewChild} from '@angular/core';
 import {UserBillModel} from '../Shared/userBill.model';
 import * as fromApp from '../AppStore/app.reducer';
 import {Store} from '@ngrx/store';
@@ -13,15 +13,25 @@ export class BillHistoryComponent implements OnInit, OnDestroy {
   bills: UserBillModel[] = [];
   myBills = [];
   sub: Subscription;
+  selected = 1;
+  @ViewChild('dropdown', {static: false}) dropDown: ElementRef;
 
-  constructor(private store: Store<fromApp.AppState>) { }
+  constructor(private store: Store<fromApp.AppState>, private render: Renderer2) { }
 
   ngOnInit() {
     this.sub = this.store.select('bill').subscribe((bills: fromBill.State) => {
-      console.log(bills.bills);
       this.bills = bills.bills;
       this.myBills = bills.paidBills;
     });
+  }
+
+  onDropdown() {
+    const el = this.dropDown.nativeElement.classList.contains('show');
+    if (el === false){
+      this.render.addClass(this.dropDown.nativeElement,   'show');
+    } else {
+      this.render.removeClass(this.dropDown.nativeElement, 'show');
+    }
   }
 
   ngOnDestroy(): void {

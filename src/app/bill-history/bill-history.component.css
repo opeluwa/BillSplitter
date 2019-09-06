@@ -7,3 +7,9 @@ h4{
   margin-top: 20px;
 }
 
+.dropdown {
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}

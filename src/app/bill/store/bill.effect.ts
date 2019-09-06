@@ -8,6 +8,8 @@ import {HttpClient} from '@angular/common/http';
 import {Store} from '@ngrx/store';
 import * as fromApp from '../../AppStore/app.reducer';
 import {of} from 'rxjs';
+import {PaidModel} from '../../Shared/paid.model';
+import {MyActiveModel} from '../../Shared/myActive.model';
 const BACKEND_URL_BILL = environment.apiUrl + '/bills';
 
 const billSorter = (bills) => { // sorts bills into two arrays, either fully paid or still needs payments.
@@ -21,9 +23,11 @@ const billSorter = (bills) => { // sorts bills into two arrays, either fully pai
         usersWhoNeedToPay.push(users.email);
       }
     });
+    const bill = new PaidModel(arrays._id, arrays.billName, arrays.billUsers, arrays.cost, arrays.dateCreated,
+      arrays.dateDue, arrays.partyId, arrays.description, arrays.numOfPayers, arrays.imagePath);
 
-    usersWhoNeedToPay.length > 0 ? myActiveBills.push({bill: arrays, stillDue: usersWhoNeedToPay}) :
-      paidBills.push({bill: arrays});
+    usersWhoNeedToPay.length > 0 ? myActiveBills.push(new MyActiveModel(bill, usersWhoNeedToPay)) :
+      paidBills.push(bill);
   });
 
   return new billActions.billSuccess({myActiveBills, paidBills});

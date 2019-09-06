@@ -6,7 +6,7 @@ import { HeaderComponent } from './header/header.component';
 import { HoverDirective } from './notification/notification-item/hover.directive';
 import { AppRouter } from './app-router';
 import {TimeAgoPipe} from 'time-ago-pipe';
-import { NewBillComponent } from './notification/notification-item/new-bill/new-bill.component';
+import { NewBillComponent } from './new-bill/new-bill.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpService } from './Shared/http.service';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';

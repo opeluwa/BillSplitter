@@ -3,6 +3,8 @@ import * as billAction from './bill.action';
 import {BILL_FETCH_SUCCESS} from './bill.action';
 import {UserBillModel} from '../../Shared/userBill.model';
 import {NEW_BILL_SUCCESS} from './bill.action';
+import {PaidModel} from '../../Shared/paid.model';
+import {MyActiveModel} from '../../Shared/myActive.model';
 
 
 interface replacement {
@@ -12,10 +14,11 @@ interface replacement {
   groupName: string;
   billId: number;
 }
+
 export interface State {
   bills: UserBillModel[];
-  myActiveBills: any[];
-  paidBills: any[];
+  myActiveBills: MyActiveModel[];
+  paidBills: PaidModel[];
   indexToPay: number;
   billToAdd: any;
   paidBillReplacement: replacement;
@@ -74,7 +77,7 @@ export function billReducer(state: State = initialState, action: billAction.bill
       const newActiveBills = [...state.myActiveBills]; // get original bills that they own
 
       const MyActiveBillIndex = state.myActiveBills.findIndex(x =>
-        x.bill._id === newBillsLeft[state.indexToPay].mainBill.Id);
+        x.mainBill.id === newBillsLeft[state.indexToPay].mainBill.Id);
       // get from the index paid users own posts, from the bills they own array
 
       if (MyActiveBillIndex >= 0) { // if they own the bill

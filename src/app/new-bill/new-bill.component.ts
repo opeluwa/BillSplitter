@@ -1,16 +1,18 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {FormControl, FormGroup, Validators} from '@angular/forms';
 
-import {HttpService} from '../../../Shared/http.service';
+import {HttpService} from '../Shared/http.service';
 
-import {AuthService} from '../../../Shared/auth.service';
+import {AuthService} from '../Shared/auth.service';
 import {mimeType} from './mime-type.validtor';
 import {Subscription} from 'rxjs';
-import * as fromApp from '../../../AppStore/app.reducer';
+import * as fromApp from '../AppStore/app.reducer';
 import {Store} from '@ngrx/store';
-import * as fromparties from '../../../party/store/party.reducer';
-import * as billAction from '../../../bill/store/bill.action';
-import {PartyModel} from '../../../party/party.model';
+import * as fromparties from '../party/store/party.reducer';
+import * as billAction from '../bill/store/bill.action';
+import {PartyModel} from '../party/party.model';
+import {Actions, ofType} from '@ngrx/effects';
+import {take, tap} from 'rxjs/operators';
 @Component({
   selector: 'app-new-bill',
   templateUrl: './new-bill.component.html',
@@ -19,13 +21,15 @@ import {PartyModel} from '../../../party/party.model';
 export class NewBillComponent implements OnInit, OnDestroy {
 
   constructor(private httpserv: HttpService,
-              private authServ: AuthService, private store: Store<fromApp.AppState>) { }
+              private authServ: AuthService, private store: Store<fromApp.AppState>,
+              private actions$: Actions ) { }
 
   form: FormGroup;
   userParties: PartyModel[];
   imagePreview: string;
   sub: Subscription;
   isLoading = false;
+  subNewBill: Subscription;
 
   ngOnInit() {
     this.sub = this.store.select('parties').subscribe((data: fromparties.State) => {
@@ -35,6 +39,10 @@ export class NewBillComponent implements OnInit, OnDestroy {
     this.store.select('bill').subscribe(data => {
       this.isLoading = data.isLoading;
     });
+
+    this.subNewBill = this.actions$.pipe(ofType(billAction.NEW_BILL_SUCCESS), tap(() => {  // reset the form, on complete
+      this.form.reset();
+    })).subscribe();
 
     this.form = new FormGroup({ // page form
       name: new FormControl(null, [Validators.required]),
@@ -71,6 +79,7 @@ export class NewBillComponent implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     this.sub.unsubscribe();
+    this.subNewBill.unsubscribe();
   }
 }
 

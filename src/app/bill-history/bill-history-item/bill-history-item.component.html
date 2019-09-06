@@ -5,7 +5,7 @@
       <h5 class="mb-1">{{selectedItem.mainBill.billName}}</h5>
       <small class="text-muted">{{selectedItem.mainBill.dateDue | date:'fullDate' }}</small>
     </div>
-    <small class="text-muted"> <b>Total Cost</b>: £{{selectedItem.mainBill.cost}} | <b>You owed</b> : ${{selectedItem.mainBill.cost/selectedItem.mainBill.numOfPayers  | number: '1.2-2'}} | <b>Bill created</b>:  {{selectedItem.mainBill.dateCreated | date:"MM/dd/yy"}}
+    <small class="text-muted"> <b>Total Cost</b>: £{{selectedItem.mainBill.cost}} | <b>You owed</b> : £{{selectedItem.mainBill.cost/selectedItem.mainBill.numOfPayers  | number: '1.2-2'}} | <b>Bill created</b>:  {{selectedItem.mainBill.dateCreated | date:"MM/dd/yy"}}
       | <b>Bill Due date</b>:  {{selectedItem.mainBill.dateDue | date:"MM/dd/yy"}} </small>
     <p class="mb-1"> <b>Description</b> : <label [ngStyle]="{'color': selectedItem.mainBill.description === 'null' ? 'grey' : 'black'}" >{{ selectedItem.mainBill.description}}</label></p>
     <small class="text-muted" style="color: green;">This bill has been paid :)</small>

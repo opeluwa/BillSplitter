@@ -1,4 +1,4 @@
-import {Component, OnDestroy, OnInit} from '@angular/core';
+import {Component, OnDestroy, OnInit, Renderer2, ViewChild} from '@angular/core';
 import {AuthService} from '../Shared/auth.service';
 import {UserBillModel} from '../Shared/userBill.model';
 import {NotificationService} from '../notification/notification.service';
@@ -9,6 +9,7 @@ import * as fromBill from '../bill/store/bill.reducer';
 import {Store} from '@ngrx/store';
 import {map} from 'rxjs/operators';
 import {Subscription} from 'rxjs';
+import {createViewChild} from '@angular/compiler/src/core';
 @Component({
   selector: 'app-active-bill',
   templateUrl: './active-bill.component.html',
@@ -21,14 +22,28 @@ export class ActiveBillComponent implements OnInit, OnDestroy {
   myActiveBills = [];
   state = 'normal';
   sub: Subscription;
+  selected = 1;
+  @ViewChild('dropdown', {static: false}) dropDown;
   constructor(private authServ: AuthService,
-              private notificationServ: NotificationService, private store: Store<fromApp.AppState>) { }
+              private notificationServ: NotificationService, private store: Store<fromApp.AppState>,
+              private render: Renderer2) { }
 
   ngOnInit() {
     this.sub = this.store.select('bill').subscribe((bills: fromBill.State) => {
+
       this.myActiveBills = bills.myActiveBills;
       this.bills = bills.bills;
     });
+  }
+
+  onDropdown() {
+    const el = this.dropDown.nativeElement.classList.contains('show');
+
+    if (el === false){
+      this.render.addClass(this.dropDown.nativeElement,   'show');
+    } else {
+      this.render.removeClass(this.dropDown.nativeElement, 'show');
+    }
   }
 
   ngOnDestroy(): void {

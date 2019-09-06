@@ -18,7 +18,6 @@ export class  NotificationService{
       (data.notificationsBills).map(item => {
         this.billNotifications.push(item);
       });
-      console.log(this.billNotifications);
       this.billNotificationSubject.next(this.billNotifications);
 
       (data.notificationsParty).map(item => {

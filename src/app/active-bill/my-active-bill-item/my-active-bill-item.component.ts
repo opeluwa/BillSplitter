@@ -1,4 +1,5 @@
 import {Component, Input, OnInit} from '@angular/core';
+import {MyActiveModel} from '../../Shared/myActive.model';
 
 @Component({
   selector: 'app-my-active-bill-item',
@@ -6,7 +7,7 @@ import {Component, Input, OnInit} from '@angular/core';
   styleUrls: ['./my-active-bill-item.component.css']
 })
 export class MyActiveBillItemComponent implements OnInit {
-  @Input() selectedItem;
+  @Input() selectedItem: MyActiveModel;
   constructor() { }
 
   ngOnInit() {

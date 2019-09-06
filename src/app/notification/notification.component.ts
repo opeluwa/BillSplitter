@@ -26,7 +26,6 @@ export class NotificationComponent implements OnInit {
 
     this.NotificationServ.partyNotificationSubject.subscribe(data => { // wipe all party notifications if required
       data ? this.partyNotifications = data : [];
-      console.log(data);
     });
   }
 

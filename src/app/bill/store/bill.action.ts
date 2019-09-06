@@ -1,4 +1,5 @@
 import {UserBillModel} from '../../Shared/userBill.model';
+import {PaidModel} from '../../Shared/paid.model';
 
 export const BILL_FETCH_START = '[BILL] BILL_FETCH_START';
 export const BILL_FETCH_SUCCESS = '[BILL] BILL_FETCH';
@@ -27,7 +28,7 @@ export class billFetch {
 
 export class billSuccess {
   readonly type = BILL_FETCH_SUCCESS;
-  constructor(public payload: {myActiveBills: any[], paidBills: any[]}) {}
+  constructor(public payload: {myActiveBills: any[], paidBills: PaidModel[]}) {}
 }
 
 export class payBillSuccess {

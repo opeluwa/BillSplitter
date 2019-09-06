@@ -10,7 +10,6 @@ export class  BillinfoDirective implements AfterViewInit {
   @HostListener('mouseenter') hovered(event: Event) {
 
     this.render.setProperty(this.elRef.nativeElement, 'template', '<p align="center">(Click to see more infomation<br>and to mark as paid)</p> ');
-    console.log('yeah');
     this.backgroundColor = '#35475a';
   }
 
@@ -21,12 +20,10 @@ export class  BillinfoDirective implements AfterViewInit {
   }
 
   constructor(private render: Renderer2, private elRef: ElementRef) {
-    // console.log('---------'+this.elRef.nativeElement.innerHTML);
   }
 
   ngAfterViewInit() {
     this.OGInnerText = this.elRef.nativeElement.innerHTML;
-    console.log('viewwwwwwwwww');
   }
 
 }

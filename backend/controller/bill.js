@@ -18,7 +18,7 @@ exports.makeBill = (req, res, next) => {  // make a new bill route
       userId: req.userData.userId,
       description: req.body.description,
       numOfPayers: memsInparty.length,
-      imagePath: url + "/image/" + req.file.filename,
+      imagePath: url + "/images/" + req.file.filename,
       billUsers: []  // empty list of users that will be filed in later.
     });
     mainBill.save().then(() => { // save the bill
