@@ -54,6 +54,7 @@ export function partyReducer(state = initialState, action: partyAction.PartyActi
         isLoadingNew: true
       };
     case partyAction.ADD_PARTY_FAILED:
+
         return {
         ...state,
           AddErrorMessage: action.payload,

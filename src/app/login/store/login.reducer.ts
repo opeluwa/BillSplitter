@@ -42,8 +42,11 @@ export function AuthReducer(state: State = initialState, action: loginActions.lo
       };
     case loginActions.LOGOUT:
       return {
-        ...state,
-        user: null,
+        ...initialState
+      };
+    case loginActions.LOGOUT_ONREFRESH:
+      return {
+        ...initialState
       };
     case loginActions.LOGIN_FAILURE:
       return {

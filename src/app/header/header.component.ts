@@ -1,4 +1,4 @@
-import {Component, ElementRef, OnInit, Renderer2, ViewChild} from '@angular/core';
+import {Component, ElementRef, OnDestroy, OnInit, Renderer2, ViewChild} from '@angular/core';
 import {HttpService} from '../Shared/http.service';
 import {AuthService} from '../Shared/auth.service';
 import * as authActions from '../login/store/login.actions';
@@ -7,21 +7,23 @@ import * as fromApp from '../AppStore/app.reducer';
 import * as systemAction from '../Shared/systemStore/system.action';
 import {map, take, tap} from 'rxjs/operators';
 import {State, Store} from '@ngrx/store';
+import {Subscription} from 'rxjs';
 
 @Component({
   selector: 'app-header',
   templateUrl: './header.component.html',
   styleUrls: ['./header.component.css']
 })
-export class HeaderComponent implements OnInit {
+export class HeaderComponent implements OnInit, OnDestroy {
   collapsed: boolean  = true;
   isLoggedIn: boolean = false;
+  loginsub: Subscription;
   @ViewChild('hiddenMenu', {static: false}) hiddenDiv: ElementRef;
   constructor(private httpServ: HttpService, private authServ: AuthService,
               private store: Store<fromApp.AppState>, private render: Renderer2) { }
 
   ngOnInit() {
-    this.store.select('auth').pipe(map((stateData: fromAuth.State) => {
+    this.loginsub = this.store.select('auth').pipe(map((stateData: fromAuth.State) => {
       return stateData.user;
     })).subscribe(authData => {
       this.isLoggedIn = !!authData; // check if user is logged in
@@ -35,5 +37,9 @@ export class HeaderComponent implements OnInit {
 
   logout() {
     this.store.dispatch(new authActions.logout());
+  }
+
+  ngOnDestroy(): void {
+    this.loginsub.unsubscribe();
   }
 }

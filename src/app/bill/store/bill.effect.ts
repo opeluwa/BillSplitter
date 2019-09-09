@@ -38,7 +38,7 @@ export class BillEffect {
   constructor(private actions$: Actions, private http: HttpClient, private store: Store<fromApp.AppState>) {}
 @Effect()
   billFetch = this.actions$.pipe(ofType(billActions.BILL_FETCH_START), switchMap( () => {
-    return this.http.get<{message: string, content: any[]}>(BACKEND_URL_BILL + '/myBills').pipe(
+    return this.http.get<{message: string, content: any[]}>(BACKEND_URL_BILL + '/myBills').pipe(take(1),
       map((httpData: {message: string, content: any[]}) => {
       return httpData.content;
     }), map(bills => {
@@ -66,7 +66,7 @@ export class BillEffect {
 @Effect()
   billAdd = this.actions$.pipe(ofType(billActions.NEW_BILL), withLatestFrom(this.store.select('bill')),
     switchMap(([data, stateData]) => {
-      return this.http.post<any>(BACKEND_URL_BILL, stateData.billToAdd).pipe(map(http => {
+      return this.http.post<any>(BACKEND_URL_BILL, stateData.billToAdd).pipe(take(1), map(http => {
       return new billActions.newBillSuccess(); }));
     }), catchError(err => {
       return this.connectionHandler(); }));

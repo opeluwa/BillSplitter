@@ -24,6 +24,7 @@ export class LoginComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
+    this.store.dispatch(new authActions.logoutOnRefresh());
     this.sub = this.store.select('auth').pipe(map(data => { return data; })).subscribe(data => {
       this.errorMessage = data.authError;
       this.isLoading = data.isLoading;

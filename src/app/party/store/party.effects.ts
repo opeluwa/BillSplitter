@@ -4,14 +4,12 @@ import {Injectable} from '@angular/core';
 import {catchError, exhaustMap, map, switchMap, take, tap, withLatestFrom} from 'rxjs/operators';
 
 import {environment} from '../../../environments/environment';
-import {PartyModel} from '../party.model';
 import {HttpClient} from '@angular/common/http';
 import {RecivedPartyModel} from '../recivedParty.model';
 import * as fromParty from './party.reducer';
 import {of} from 'rxjs';
 import * as fromApp from '../../AppStore/app.reducer';
 import {Store} from '@ngrx/store';
-import * as authActions from '../../login/store/login.actions';
 const BACKEND_URL_PARTIES = environment.apiUrl + '/parties';
 
 const addPartyToList = (data, partyState: fromParty.State) => {
@@ -21,6 +19,10 @@ const addPartyToList = (data, partyState: fromParty.State) => {
 };
 
 const handleError = (error) => {
+  console.log('failure');
+  if (!error.error.message) {
+    alert('Issue communicating with server, try again later');
+  }
   return error.error.message ?
     new partyAction.addPartiesFailed(error.error.message) :
     new partyAction.addPartiesFailed('Issue communicating with server, try again later');
@@ -66,11 +68,12 @@ export class PartyEffect {
   addParties = this.actions$.pipe(ofType(partyAction.ADD_PARTY), withLatestFrom(this.store.select('parties')),
     switchMap(([action, partyState]) => {
     return this.http.post<{message: string, content: any}>(BACKEND_URL_PARTIES,
-      {groupName: partyState.partyToAddName, userEmail: partyState.partyToAddEmail}).pipe(
+      {groupName: partyState.partyToAddName, userEmail: partyState.partyToAddEmail}).pipe(take(1),
         withLatestFrom(this.store.select('parties')), map(([data, partyState]) => {
       return addPartyToList(data.content, partyState);
     }), catchError(error => {
-      return this.connectionHandler(error, true);
+        console.log('failure');
+        return this.connectionHandler(error, true);
     })); })); // do error case on request
 
   @Effect({dispatch: false})
@@ -82,7 +85,7 @@ export class PartyEffect {
   leaveParty = this.actions$.pipe(ofType(partyAction.LEAVE_PARTY_START),
     switchMap((data: partyAction.leaveParty) => {
     return this.http.post<{ message: string}>(BACKEND_URL_PARTIES
-      + '/leave/' + data.payload.id, data.payload).pipe(map(() => {
+      + '/leave/' + data.payload.id, data.payload).pipe(take(1), map(() => {
         return new partyAction.leavePartySuccess();
     }), catchError(error => {
       return this.connectionHandler(error, false);
@@ -100,7 +103,9 @@ export class PartyEffect {
   connectionHandler(error, isNewParty) {
     return this.store.select('system').pipe(take(1), exhaustMap( systemData => {
       if (!systemData.connected) {
-        return of(new authActions.loginFailure('Device is not connected to the internet. Please connect and try again'));
+        alert('Device is not connected to the internet. Please connect and try again');
+        return isNewParty ? of(new partyAction.addPartiesFailed('Device is not connected to the internet. Please connect and try again')) :
+          of(new partyAction.leavePartyFail('Device is not connected to the internet. Please connect and try again'));
       } else {
         return isNewParty ? of(handleError(error)) : of(leavePartyHandleError(error));
       }

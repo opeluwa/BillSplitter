@@ -76,6 +76,12 @@ export class AuthEffects {
         return this.connectionHandler(error); }));
     }));
 
+  @Effect({dispatch: false})
+  logoutOnRefresh = this.actions$.pipe(ofType(authActions.LOGOUT_ONREFRESH), tap(() => {
+    this.authServ.removeLogoutTimer();
+    localStorage.clear();
+  }));
+
   connectionHandler(error) {
     return this.store.select('system').pipe(take(1), exhaustMap( systemData => {
       if (!systemData.connected) {
