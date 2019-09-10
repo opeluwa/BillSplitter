@@ -4,8 +4,8 @@
       <h5 class="mb-1">{{selectedItem.mainBill.billName}}</h5>
       <small class="text-muted">{{  selectedItem.mainBill.dateDue > date ? 'Due' : 'Late'}}</small>
     </div>
-    <small class="text-muted">Total Cost: £{{selectedItem.mainBill.cost}} | <b>You owe</b> : £{{selectedItem.mainBill.cost/selectedItem.mainBill.numOfPayers }} |
-      Bill created:  {{selectedItem.mainBill.dateCreated | date:"MM/dd/yy"}} | Bill Due:  {{selectedItem.mainBill.dateDue | date:"MM/dd/yy"}} </small>
+    <small class="text-muted"><b>Total Cost</b>: £{{selectedItem.mainBill.cost}} | <b>You owe</b> : £{{selectedItem.mainBill.cost/selectedItem.mainBill.numOfPayers }} |
+      <b>Bill created</b>:  {{selectedItem.mainBill.dateCreated | date:"MM/dd/yy"}} | <b>Bill Due</b>:  {{selectedItem.mainBill.dateDue | date:"MM/dd/yy"}} </small>
     <div class="image" *ngIf="selectedItem.mainBill.imagePath">
       <img [src]=selectedItem.mainBill.imagePath [alt]="selectedItem.mainBill.billName">
     </div>

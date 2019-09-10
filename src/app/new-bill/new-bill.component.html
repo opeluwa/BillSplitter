@@ -14,6 +14,7 @@
             <div class="form-group">
               <label for="name"> Bill name</label>
               <input class="form-control" name="name" formControlName="name" type="text" id="name">
+              <span class="text-danger" *ngIf="!form.get('name').valid && form.get('name').touched"> A name for the bill is  required to be entered</span>
             </div>
           </div>
         </div>
@@ -27,8 +28,7 @@
                   </div>
                   <input class="form-control" name="cost" formControlName="cost" type="number" id="cost">
                 </div>
-
-
+                <span class="text-danger" *ngIf="!form.get('cost').valid && form.get('cost').touched"> The bill cost must be above £0</span>
               </div>
           </div>
         </div>
@@ -37,6 +37,7 @@
             <div class="form-group">
               <label>Date due</label>
               <input class="form-control" formControlName="date" type="date" id="x">
+              <span class="help-block" *ngIf="!form.get('date').valid && form.get('date').touched">Date is not valid</span>
             </div>
           </div>
         </div>
@@ -44,10 +45,11 @@
           <div class="col-sm-12 col-md-12">
             <div class="form-group">
               <label for="group">Party Group</label>
-              <select id="group" formControlName="party" name="group"  class="form-control">
+              <select id="group" formControlName="party" name="group" required  class="form-control">
                 <option value="null" disabled selected hidden>{{ userParties.length === 0 ? 'You must be in a party first' : 'Select a party' }}</option>
                 <option *ngFor="let item of userParties" [ngValue]="item">{{item.groupName}}</option>
               </select>
+              <span class="text-danger" *ngIf="!form.get('party').valid && form.get('party').touched">A party must be selected</span>
             </div>
           </div>
         </div>
@@ -63,15 +65,17 @@
 
 
         <div class="row">
-          <div class="col">
-            <button type="submit" [disabled]="!form.valid" class="btn btn-success">Confirm Bill</button>
+            <div class="col-4 col-md-2">
+              <button type="submit" [disabled]="!form.valid" class="btn btn-success" style="margin:0px">Confirm Bill</button>
+            </div>
+            <div class="col-6 col-md-3">
             <button [class]=" form.get('image').valid ? 'btn btn-primary' : 'btn btn-danger'" type="button" (click)="fileClicker.click()">Add image as proof</button>
+            </div>
+        </div>
+        <div class="row">
             <input type="file" #fileClicker hidden (change)="onImagePicked($event)">
             <div class="s">
               <span class="help-block" *ngIf="!form.get('image').valid && form.touched"> **Proof of billing is required this, must be of type PNG or JPEG <hr></span>
-              <span class="help-block" *ngIf="!form.get('name').valid && form.get('name').touched"> A name for the bill is  required to be entered <hr> </span>
-              <span class="help-block" *ngIf="!form.get('cost').valid && form.get('cost').touched"> The bill cost must be above £0 <hr></span>
-              <span class="help-block" *ngIf="!form.get('date').valid && form.get('date').touched">Date is not valid<hr></span>
             </div>
           </div>
 
@@ -83,8 +87,6 @@
           </div>
           </div>
 
-
-        </div>
 
       </form>
 

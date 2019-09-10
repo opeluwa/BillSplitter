@@ -13,3 +13,8 @@ h4{
   -ms-user-select: none;
   user-select: none;
 }
+
+.t{
+  margin-top: 25vh;
+  margin-bottom: 25vh;
+}

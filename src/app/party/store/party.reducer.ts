@@ -10,6 +10,7 @@ export interface State {
   leavePartyError: string;
   isLoadingManage: boolean;
   isLoadingNew: boolean;
+  resetForm: boolean;
 }
 
 const initialState: State = {
@@ -20,7 +21,8 @@ const initialState: State = {
   idToLeave: null,
   leavePartyError: null,
   isLoadingManage: false,
-  isLoadingNew: false
+  isLoadingNew: false,
+  resetForm: false
 };
 
 export function partyReducer(state = initialState, action: partyAction.PartyAction) {
@@ -44,6 +46,7 @@ export function partyReducer(state = initialState, action: partyAction.PartyActi
         isLoadingNew: false,
         partyToAddName: '',
         partyToAddEmail: [],
+        resetForm: true
       };
     case partyAction.ADD_PARTY_START:
       return {
@@ -51,16 +54,17 @@ export function partyReducer(state = initialState, action: partyAction.PartyActi
         partyToAddName: action.payload.groupName,
         partyToAddEmail: action.payload.usersEmails,
         AddErrorMessage: null,
-        isLoadingNew: true
+        isLoadingNew: true,
+        resetForm: false
       };
     case partyAction.ADD_PARTY_FAILED:
-
         return {
         ...state,
           AddErrorMessage: action.payload,
           isLoadingNew: false,
           partyToAddName: '',
-          partyToAddEmail: []
+          partyToAddEmail: [],
+          resetForm: false
         };
     case partyAction.LEAVE_PARTY_START:
       return {

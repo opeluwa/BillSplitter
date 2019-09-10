@@ -7,7 +7,7 @@
 .lds-ring div {
   box-sizing: border-box;
   display: block;
-  position: absolute;
+  position: fixed;
   width: 51px;
   height: 51px;
   margin: 6px;
